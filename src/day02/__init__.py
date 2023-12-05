@@ -1,3 +1,5 @@
+import re
+from dataclasses import dataclass, field
 from pathlib import Path
 
 
@@ -10,38 +12,28 @@ def load(data_file: Path):
     return games
 
 
+@dataclass
 class Drawing:
-    def __init__(self, blue: int = 0, green: int = 0, red: int = 0):
-        self.blue = blue
-        self.green = green
-        self.red = red
-
-    def __eq__(self, other):
-        if isinstance(other, Drawing):
-            return (
-                self.red == other.red
-                and self.green == other.green
-                and self.blue == other.blue
-            )
-        else:
-            return NotImplemented
+    blue: int = 0
+    green: int = 0
+    red: int = 0
 
     @staticmethod
     def from_str(drawing_data: str):
-        return Drawing(0, 0, 0)
+        drawing_kwargs = dict(
+            (k, int(v)) for v, k in re.findall(r"(\d+) (blue|green|red)", drawing_data)
+        )
+        return Drawing(**drawing_kwargs)
 
 
+@dataclass
 class Game:
-    def __init__(self, id: int, drawings: list[Drawing]):
-        self.id = id
-        self.drawings = drawings
-
-    def __eq__(self, other):
-        if isinstance(other, Game):
-            return self.id == other.id and self.drawings == other.drawings
-        else:
-            return NotImplemented
+    id: int
+    drawings: list[Drawing] = field(default_factory=list)
 
     @staticmethod
     def from_str(game_data: str):
-        return Game(0, [Drawing()])
+        (id_data, drawings_data) = game_data.split(":")
+        id = int(re.search(r"Game (\d+)", id_data).group(1))
+        drawings = [Drawing.from_str(d) for d in drawings_data.split(";")]
+        return Game(id, drawings)
