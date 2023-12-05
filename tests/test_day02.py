@@ -62,7 +62,11 @@ class Day02Tests(unittest.TestCase):
         )
 
     def test_power(self):
-        self.assertEqual(2286, sum(game.smallest_possible_bag.power for game in self.example))
+        self.assertEqual(
+            2286, sum(game.smallest_possible_bag.power for game in self.example)
+        )
 
     def test_solution_2(self):
-        self.assertEqual(67335, sum(game.smallest_possible_bag.power for game in self.input))
+        self.assertEqual(
+            67335, sum(game.smallest_possible_bag.power for game in self.input)
+        )
