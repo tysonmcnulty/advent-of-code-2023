@@ -1,5 +1,12 @@
 A game has an id, which is just a number
 A game has many drawings
+A game evidently has a smallest possible bag, which is just a bag
 A drawing has a "green" number
 A drawing has a "red" number
 A drawing has a "blue" number
+A bag has a "blue" number
+A bag has a "green" number
+A bag has a "red" number
+Given a bag, a game is either possible or not
+Given a bag, a drawing is either possible or not
+A bag evidently has a "power" number
