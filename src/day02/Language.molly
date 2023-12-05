@@ -1,0 +1,5 @@
+A game has an id, which is just a number
+A game has many drawings
+A drawing has a "green" number
+A drawing has a "red" number
+A drawing has a "blue" number

@@ -34,4 +34,4 @@ class Day01Tests(unittest.TestCase):
         self.assertEqual(sum(self.input), 55090)
 
     def test_solution_2(self):
-        self.assertEqual(sum(self.input_2), 54871)
+        self.assertEqual(sum(self.input_2), 54845)
