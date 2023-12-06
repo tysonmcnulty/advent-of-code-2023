@@ -1,4 +1,4 @@
-A scratchcard has a number
+A scratchcard has an id, which is just a number
 A scratchcard has many winning numbers, which are just numbers
 A scratchcard has many picks, which are just numbers
 A scratchcard evidently has a point value, which is just a number
