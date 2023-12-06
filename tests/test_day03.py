@@ -13,33 +13,29 @@ class Day03Tests(unittest.TestCase):
     def test_load_example(self):
         self.assertEqual(
             self.example.symbols,
-            set(
-                [
-                    Symbol(value="*", location=Coordinate(x=3, y=1)),
-                    Symbol(value="#", location=Coordinate(x=6, y=3)),
-                    Symbol(value="*", location=Coordinate(x=3, y=4)),
-                    Symbol(value="+", location=Coordinate(x=5, y=5)),
-                    Symbol(value="$", location=Coordinate(x=3, y=8)),
-                    Symbol(value="*", location=Coordinate(x=5, y=8)),
-                ]
-            ),
+            {
+                Symbol(value="*", location=Coordinate(x=3, y=1)),
+                Symbol(value="#", location=Coordinate(x=6, y=3)),
+                Symbol(value="*", location=Coordinate(x=3, y=4)),
+                Symbol(value="+", location=Coordinate(x=5, y=5)),
+                Symbol(value="$", location=Coordinate(x=3, y=8)),
+                Symbol(value="*", location=Coordinate(x=5, y=8)),
+            },
         )
         self.assertEqual(
             self.example.numbers,
-            set(
-                [
-                    Number(value="467", location=Coordinate(x=0, y=0)),
-                    Number(value="114", location=Coordinate(x=5, y=0)),
-                    Number(value="35", location=Coordinate(x=2, y=2)),
-                    Number(value="633", location=Coordinate(x=6, y=2)),
-                    Number(value="617", location=Coordinate(x=0, y=4)),
-                    Number(value="58", location=Coordinate(x=7, y=5)),
-                    Number(value="592", location=Coordinate(x=2, y=6)),
-                    Number(value="755", location=Coordinate(x=6, y=7)),
-                    Number(value="664", location=Coordinate(x=1, y=9)),
-                    Number(value="598", location=Coordinate(x=5, y=9)),
-                ]
-            ),
+            {
+                Number(value="467", location=Coordinate(x=0, y=0)),
+                Number(value="114", location=Coordinate(x=5, y=0)),
+                Number(value="35", location=Coordinate(x=2, y=2)),
+                Number(value="633", location=Coordinate(x=6, y=2)),
+                Number(value="617", location=Coordinate(x=0, y=4)),
+                Number(value="58", location=Coordinate(x=7, y=5)),
+                Number(value="592", location=Coordinate(x=2, y=6)),
+                Number(value="755", location=Coordinate(x=6, y=7)),
+                Number(value="664", location=Coordinate(x=1, y=9)),
+                Number(value="598", location=Coordinate(x=5, y=9)),
+            },
         )
 
     def test_extent(self):
@@ -106,3 +102,26 @@ class Day03Tests(unittest.TestCase):
         self.assertEqual(
             525911, sum(map(int, (n.value for n in self.input.part_numbers)))
         )
+
+    def test_gears(self):
+        self.assertEqual(
+            {
+                Symbol(value="*", location=Coordinate(x=3, y=1)),
+                Symbol(value="*", location=Coordinate(x=5, y=8)),
+            },
+            self.example.gears,
+        )
+
+    def test_gear_ratios(self):
+        self.assertEqual(
+            {
+                Symbol(value="*", location=Coordinate(x=3, y=1)): 16345,
+                Symbol(value="*", location=Coordinate(x=5, y=8)): 451490,
+            },
+            self.example.gear_ratios_by_gear,
+        )
+        self.assertEqual(467835, sum(self.example.gear_ratios_by_gear.values()))
+
+    def test_solution_2(self):
+        print(self.input.gear_ratios_by_gear)
+        self.assertEqual(75805607, sum(self.input.gear_ratios_by_gear.values()))

@@ -3,6 +3,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass, field
 from functools import cached_property
 from itertools import chain
+from math import prod
 from pathlib import Path
 from typing import Self
 
@@ -120,6 +121,32 @@ class Schematic:
             n
             for n in self.numbers
             if any(map(lambda c: c in symbol_locations, n.extent.neighborhood))
+        }
+
+    @cached_property
+    def part_numbers_by_extent_coordinates(self) -> dict[Coordinate, Number]:
+        return dict((c, n) for n in self.part_numbers for c in n.extent)
+
+    @cached_property
+    def gears(self) -> set[Symbol]:
+        return {
+            s
+            for s in self.symbols
+            if s.value == "*" and len(self.nearby_part_numbers(s)) >= 2
+        }
+
+    @cached_property
+    def gear_ratios_by_gear(self) -> dict[Symbol, int]:
+        return dict(
+            (g, prod(map(int, (p.value for p in self.nearby_part_numbers(g)))))
+            for g in self.gears
+        )
+
+    def nearby_part_numbers(self, symbol: Symbol) -> set[Number]:
+        return {
+            self.part_numbers_by_extent_coordinates[c]
+            for c in symbol.neighborhood
+            if c in self.part_numbers_by_extent_coordinates
         }
 
 
