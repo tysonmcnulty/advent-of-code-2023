@@ -1,0 +1,14 @@
+A schematic has many numbers
+A schematic has many symbols
+A schematic has an extent
+A schematic evidently has many part numbers
+A number has a value
+A number has a location, which is just a coordinate
+A number evidently has an extent
+An extent has a "top left" coordinate
+An extent has a "bottom right" coordinate
+An extent evidently has a neighborhood, which is just a set of coordinates
+An extent evidently has a domain, which is just a set of coordinates
+A symbol has a location, which is just a coordinate
+A coordinate has an "x" value
+A coordinate has a "y" value
