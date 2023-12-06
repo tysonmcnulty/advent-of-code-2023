@@ -2,6 +2,7 @@ import re
 from collections.abc import Iterable
 from dataclasses import dataclass, field
 from functools import cached_property
+from itertools import chain
 from pathlib import Path
 from typing import Self
 
@@ -60,7 +61,26 @@ class Neighborhood:
     def __contains__(self, item: Coordinate) -> bool:
         return item in self.outer and not item in self.inner
 
-    def __len__(self):
+    def __iter__(self) -> Iterable[Coordinate]:
+        return chain(
+            (
+                Coordinate(x, self.outer.top_left.y)
+                for x in range(self.outer.top_left.x, self.outer.bottom_right.x + 1)
+            ),
+            chain.from_iterable(
+                (
+                    Coordinate(self.outer.top_left.x, y),
+                    Coordinate(self.outer.bottom_right.x, y),
+                )
+                for y in range(self.outer.top_left.y + 1, self.outer.bottom_right.y)
+            ),
+            (
+                Coordinate(x, self.outer.bottom_right.y)
+                for x in range(self.outer.top_left.x, self.outer.bottom_right.x + 1)
+            ),
+        )
+
+    def __len__(self) -> int:
         return len(self.outer) - len(self.inner)
 
 
@@ -68,6 +88,10 @@ class Neighborhood:
 class Symbol:
     value: str
     location: Coordinate
+
+    @cached_property
+    def neighborhood(self) -> Neighborhood:
+        return Extent(self.location, self.location).neighborhood
 
 
 @dataclass(frozen=True)
@@ -88,6 +112,15 @@ class Schematic:
     extent: Extent
     symbols: set[Symbol] = field(default_factory=set)
     numbers: set[Number] = field(default_factory=set)
+
+    @cached_property
+    def part_numbers(self) -> set[Number]:
+        symbol_locations = {s.location for s in self.symbols}
+        return {
+            n
+            for n in self.numbers
+            if any(map(lambda c: c in symbol_locations, n.extent.neighborhood))
+        }
 
 
 def load(data_file: Path):

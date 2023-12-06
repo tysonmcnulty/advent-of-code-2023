@@ -72,3 +72,37 @@ class Day03Tests(unittest.TestCase):
         self.assertEqual(Coordinate(x=-1, y=-1), neighborhood.outer.top_left)
         self.assertTrue(Coordinate(x=10, y=10) in neighborhood)
         self.assertEqual(Coordinate(x=10, y=10), neighborhood.outer.bottom_right)
+
+    def test_neighborhood_iter(self):
+        neighborhood = Symbol("*", Coordinate(3, 3)).neighborhood
+        self.assertEqual(
+            {
+                Coordinate(2, 2),
+                Coordinate(3, 2),
+                Coordinate(4, 2),
+                Coordinate(2, 3),
+                Coordinate(4, 3),
+                Coordinate(2, 4),
+                Coordinate(3, 4),
+                Coordinate(4, 4),
+            },
+            {c for c in neighborhood},
+        )
+
+    def test_schematic_part_numbers(self):
+        self.assertEqual(8, len(self.example.part_numbers))
+        self.assertEqual(
+            {
+                Number(value="114", location=Coordinate(x=5, y=0)),
+                Number(value="58", location=Coordinate(x=7, y=5)),
+            },
+            self.example.numbers - self.example.part_numbers,
+        )
+        self.assertEqual(
+            4361, sum(map(int, (n.value for n in self.example.part_numbers)))
+        )
+
+    def test_solution_1(self):
+        self.assertEqual(
+            525911, sum(map(int, (n.value for n in self.input.part_numbers)))
+        )
