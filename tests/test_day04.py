@@ -1,7 +1,8 @@
 import unittest
+from collections import Counter
 from pathlib import Path
 
-from src.day04 import load, ScratchCard
+from src.day04 import load, process, ScratchCard
 
 
 class Day04Tests(unittest.TestCase):
@@ -28,3 +29,15 @@ class Day04Tests(unittest.TestCase):
 
     def test_solution_1(self):
         self.assertEqual(25010, sum(card.point_value for card in self.input))
+
+    def test_cards_won(self):
+        self.assertEqual([2, 3, 4, 5], self.example[0].cards_won)
+
+    def test_process(self):
+        card_counts = process(self.example)
+        self.assertEqual(Counter({1: 1, 2: 2, 3: 4, 4: 8, 5: 14, 6: 1}), card_counts)
+        self.assertEqual(30, sum(card_counts.values()))
+
+    def test_solution_2(self):
+        card_counts = process(self.input)
+        self.assertEqual(9924412, sum(card_counts.values()))
