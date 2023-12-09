@@ -2,7 +2,7 @@ import unittest
 from collections import Counter
 from pathlib import Path
 
-from src.day05 import load, Seed, Soil, Almanac, Location
+from src.day05 import load, Unit, Category, Almanac
 
 
 class Day05Tests(unittest.TestCase):
@@ -12,7 +12,15 @@ class Day05Tests(unittest.TestCase):
         cls.input = load(Path(__file__).parent / "../src/day05/input.txt")
 
     def test_load_example(self):
-        self.assertEqual([Seed(79), Seed(14), Seed(55), Seed(13)], self.example[0])
+        self.assertEqual(
+            [
+                Unit(Category.SEED, 79),
+                Unit(Category.SEED, 14),
+                Unit(Category.SEED, 55),
+                Unit(Category.SEED, 13),
+            ],
+            self.example[0],
+        )
         self.assertEqual(
             self.example[1].maps["seed"].lines,
             [Almanac.Map.Line(50, 98, 2), Almanac.Map.Line(52, 50, 48)],
@@ -22,27 +30,31 @@ class Day05Tests(unittest.TestCase):
         lines = [Almanac.Map.Line(50, 98, 2), Almanac.Map.Line(52, 50, 48)]
 
         almanac_map = Almanac.Map(
-            source_category="seed",
-            destination_category="soil",
+            source=Category.SEED,
+            destination=Category.SOIL,
             lines=lines,
         )
 
-        self.assertEqual(Soil(1), almanac_map[Seed(1)])
-        self.assertEqual(Soil(81), almanac_map[Seed(79)])
-        self.assertEqual(Soil(14), almanac_map[Seed(14)])
-        self.assertEqual(Soil(57), almanac_map[Seed(55)])
-        self.assertEqual(Soil(13), almanac_map[Seed(13)])
+        self.assertEqual(Unit(Category.SOIL, 81), almanac_map[Unit(Category.SEED, 79)])
+        self.assertEqual(Unit(Category.SOIL, 14), almanac_map[Unit(Category.SEED, 14)])
+        self.assertEqual(Unit(Category.SOIL, 57), almanac_map[Unit(Category.SEED, 55)])
+        self.assertEqual(Unit(Category.SOIL, 13), almanac_map[Unit(Category.SEED, 13)])
 
-    def test_resolve_location(self):
+    def test_resolve(self):
         (seeds, almanac) = self.example
         self.assertEqual(
-            [Location(82), Location(43), Location(86), Location(35)],
-            [almanac.resolve_location(s) for s in seeds],
+            [
+                Unit(Category.LOCATION, 82),
+                Unit(Category.LOCATION, 43),
+                Unit(Category.LOCATION, 86),
+                Unit(Category.LOCATION, 35),
+            ],
+            [almanac.resolve(s) for s in seeds],
         )
 
     def test_solution_1(self):
         (seeds, almanac) = self.input
         self.assertEqual(
-            Location(196167384),
-            min([almanac.resolve_location(s) for s in seeds], key=(lambda loc: loc.id)),
+            Unit(Category.LOCATION, 196167384),
+            min([almanac.resolve(s) for s in seeds], key=(lambda loc: loc.id)),
         )
