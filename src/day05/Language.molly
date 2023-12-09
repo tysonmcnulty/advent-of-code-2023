@@ -1,0 +1,11 @@
+A unit has a category
+A category is just seed, soil, fertilizer, water, light, temperature, humidity, or location
+A unit has an id, which is just a number
+A range has a category
+A range has a "start" number and an "end" number
+An almanac has many almanac maps
+A almanac map has a "source" category
+A almanac map has a "destination" category
+A almanac map has many almanac map lines
+An almanac map line has a "destination" range
+An almanac map line has a "source" range
