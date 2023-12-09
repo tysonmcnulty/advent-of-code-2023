@@ -21,6 +21,7 @@ class Unit:
     category: Category
     id: int
 
+    @dataclass(frozen=True)
     class Range:
         category: Category
         start: int
@@ -90,8 +91,9 @@ class Almanac:
 def load(data_file: Path):
     with open(data_file) as data:
         seed_data, *almanac_maps_data = re.split(r"\n\n+", data.read())
-
-        seeds = [Unit(Category.SEED, int(id)) for id in re.findall(r"\d+", seed_data)]
+        seed_numbers = [int(match) for match in re.findall(r"\d+", seed_data)]
+        seeds = [Unit(Category.SEED, id=n) for n in seed_numbers]
+        seed_ranges = [Unit.Range(Category.SEED, seed_numbers[n], seed_numbers[n + 1]) for n in range(0, len(seed_numbers), 2)]
 
         almanac_maps = []
         for almanac_map_data in almanac_maps_data:
@@ -104,4 +106,4 @@ def load(data_file: Path):
 
         almanac = Almanac(maps=dict((m.source, m) for m in almanac_maps))
 
-    return (seeds, almanac)
+    return (seeds, seed_ranges, almanac)

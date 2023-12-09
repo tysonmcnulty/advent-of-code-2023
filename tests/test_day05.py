@@ -22,7 +22,14 @@ class Day05Tests(unittest.TestCase):
             self.example[0],
         )
         self.assertEqual(
-            self.example[1].maps["seed"].lines,
+            [
+                Unit.Range(Category.SEED, 79, 14),
+                Unit.Range(Category.SEED, 55, 13),
+            ],
+            self.example[1]
+        )
+        self.assertEqual(
+            self.example[2].maps["seed"].lines,
             [Almanac.Map.Line(50, 98, 2), Almanac.Map.Line(52, 50, 48)],
         )
 
@@ -41,7 +48,7 @@ class Day05Tests(unittest.TestCase):
         self.assertEqual(Unit(Category.SOIL, 13), almanac_map[Unit(Category.SEED, 13)])
 
     def test_resolve(self):
-        (seeds, almanac) = self.example
+        (seeds, _, almanac) = self.example
         self.assertEqual(
             [
                 Unit(Category.LOCATION, 82),
@@ -53,7 +60,7 @@ class Day05Tests(unittest.TestCase):
         )
 
     def test_solution_1(self):
-        (seeds, almanac) = self.input
+        (seeds, _, almanac) = self.input
         self.assertEqual(
             Unit(Category.LOCATION, 196167384),
             min([almanac.resolve(s) for s in seeds], key=(lambda loc: loc.id)),
